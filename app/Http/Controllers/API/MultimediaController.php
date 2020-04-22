@@ -31,12 +31,12 @@ class MultimediaController extends Controller
         if($request->has('mediafile') && in_array($type,["USER","PUBLICATION"])){
             $media_file = Multimedia::where('type_model_media',$type)->where('id_model_media',$id)->first();            
             if($media_file == null){
-                $multiable_path = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
-                $media_file = Multimedia::create(["id_model_media"=>$id,"type_model_media"=>$type,"path_media"=>$multiable_path]);                
+                $path_media = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
+                $media_file = Multimedia::create(["id_model_media"=>$id,"type_model_media"=>$type,"path_media"=>$path_media]);                
                 return response()->json($media_file);
             }
-            Storage::delete($media_file->multiable_path);            
-            $media_file->multiable_path = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
+            Storage::delete($media_file->path_media);            
+            $media_file->path_media = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
             $media_file->save();            
             return response()->json($media_file);
         }else
@@ -68,7 +68,7 @@ class MultimediaController extends Controller
         $media_file = Multimedia::where('type_model_media',$type)->where('id_model_media',$id)->first();
         if($media_file == null)
             return response()->json(["mediafile"=>"No se encontro el recurso para ese id y tipo"], 400);
-        return Storage::response($media_file->multiable_path);
+        return Storage::response($media_file->path_media);
     }    
 
     /**
@@ -83,12 +83,12 @@ class MultimediaController extends Controller
         if($request->has('mediafile') && in_array($type,["USER","PUBLICATION"])){
             $media_file = Multimedia::where('type_model_media',$type)->where('id_model_media',$id)->first();
             if($media_file == null){
-                $multiable_path = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
-                $media_file = Multimedia::create(["id_model_media"=>$id,"type_model_media"=>$type,"path_media"=>$multiable_path]);
+                $path_media = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
+                $media_file = Multimedia::create(["id_model_media"=>$id,"type_model_media"=>$type,"path_media"=>$path_media]);
                 return response()->json($media_file);                
             }
-            Storage::delete($media_file->multiable_path);            
-            $media_file->multiable_path = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
+            Storage::delete($media_file->path_media);            
+            $media_file->path_media = $this->request_file_base_64($request, 'mediafile', 'public/'.$type.'/'.$id.'/');
             $media_file->save();           
             return response()->json($media_file);         
         }else
@@ -106,11 +106,11 @@ class MultimediaController extends Controller
         $media_file = Multimedia::where('type_model_media',$type)->where('id_model_media',$id)->first();
         
         if($media_file == null)
-            return response()->json(["mediafile"=>"Mediafile Eliminado"], 200); 
+            return response()->json(["mediafile"=>"Mediafile Ya Eliminado"], 200); 
 
-        Storage::delete($media_file->multiable_path);            
+        Storage::delete($media_file->path_media);            
         $media_file->delete();
-        return response()->json(["mediafile"=>$media_file,"message"=>"Mediafile Eliminado"], 200);     
+        return response()->json($media_file, 200);     
     }
 
 
