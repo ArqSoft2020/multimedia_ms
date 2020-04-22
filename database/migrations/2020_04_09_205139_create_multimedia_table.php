@@ -15,9 +15,9 @@ class CreateMultimediaTable extends Migration
     {
         Schema::create('multimedia', function (Blueprint $table) {
             $table->id();
-            $table->integer('multiable_id')->unsigned();
-            $table->string('multiable_type');
-            $table->string('multiable_path');
+            $table->integer('id_model_media')->unsigned();
+            $table->string('type_model_media');
+            $table->string('path_media');
             $table->timestamps();
         });
     }
